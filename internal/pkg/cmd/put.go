@@ -14,7 +14,6 @@ import (
 var putCmd = &cobra.Command{
 	Use:   "put [name, description, price]",
 	Short: "Put more beer in the store",
-	Long:  ``,
 	Args:  cobra.ExactArgs(3),
 	Run: func(cmd *cobra.Command, args []string) {
 		runPut(cmd, args)

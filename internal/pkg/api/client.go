@@ -46,7 +46,7 @@ func GetBeer(c *http.Client, name string) (*Beer, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-	if resp.StatusCode >= 200 && resp.StatusCode <= 299 {
+	if resp.StatusCode != 200 {
 		return nil, fmt.Errorf("GET %s returned %d", url, resp.StatusCode)
 	}
 	getBody, err := ioutil.ReadAll(resp.Body)
@@ -66,7 +66,8 @@ func UpdateBeer(c *http.Client, beer *Beer) error {
 	if err != nil {
 		return err
 	}
-	req, err := http.NewRequest("PUT", baseUrl, bytes.NewReader(putBody))
+	url := fmt.Sprintf("%s/%s", baseUrl, beer.Name)
+	req, err := http.NewRequest("PUT", url, bytes.NewReader(putBody))
 	if err != nil {
 		return err
 	}
@@ -75,7 +76,7 @@ func UpdateBeer(c *http.Client, beer *Beer) error {
 		return err
 	}
 	defer resp.Body.Close()
-	if resp.StatusCode >= 200 && resp.StatusCode <= 299 {
+	if resp.StatusCode != 200 {
 		return fmt.Errorf("PUT %s returned %d", baseUrl, resp.StatusCode)
 	}
 	return nil
@@ -92,7 +93,7 @@ func DeleteBeer(c *http.Client, name string) error {
 		return err
 	}
 	defer resp.Body.Close()
-	if resp.StatusCode >= 200 && resp.StatusCode <= 299 {
+	if resp.StatusCode != 200 {
 		return fmt.Errorf("DELETE %s returned %d", url, resp.StatusCode)
 	}
 	return nil
