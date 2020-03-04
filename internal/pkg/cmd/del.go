@@ -9,16 +9,20 @@ import (
 	"github.com/spf13/cobra"
 )
 
+func init() {
+	RootCmd.AddCommand(delCmd)
+}
+
 var delCmd = &cobra.Command{
 	Use:   "del [name]",
 	Short: "delete beer from the store",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		runDel(cmd, args)
+		removeBeer(cmd, args)
 	},
 }
 
-func runDel(cmd *cobra.Command, args []string) {
+func removeBeer(cmd *cobra.Command, args []string) {
 	var c = &http.Client{}
 	beerName := args[0]
 	err := api.DeleteBeer(c, beerName)
@@ -27,8 +31,4 @@ func runDel(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 	fmt.Printf("succesfully deleted beer %s\n", beerName)
-}
-
-func init() {
-	RootCmd.AddCommand(delCmd)
 }

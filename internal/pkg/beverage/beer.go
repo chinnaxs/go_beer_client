@@ -1,4 +1,4 @@
-package api
+package beverage
 
 type Beer struct {
 	Name        string
