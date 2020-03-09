@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 	"strconv"
 
@@ -26,14 +25,14 @@ var putCmd = &cobra.Command{
 }
 
 func addOrUpdateBeer(cmd *cobra.Command, args []string) {
-	var c = &http.Client{}
+	a := api.NewDefaultApiClient()
 	price, err := strconv.ParseFloat(args[2], 64)
 	if err != nil {
 		fmt.Println("please specify valid price")
 		os.Exit(1)
 	}
 	beer := &beverage.Beer{args[0], args[1], price}
-	err = api.UpdateBeer(c, beer)
+	err = a.UpdateBeer(beer)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)

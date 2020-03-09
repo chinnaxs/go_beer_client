@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 
 	"github.com/chinnaxs/go_beer_client/internal/pkg/api"
@@ -23,9 +22,9 @@ var delCmd = &cobra.Command{
 }
 
 func removeBeer(cmd *cobra.Command, args []string) {
-	var c = &http.Client{}
+	a := api.NewDefaultApiClient()
 	beerName := args[0]
-	err := api.DeleteBeer(c, beerName)
+	err := a.DeleteBeer(beerName)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)

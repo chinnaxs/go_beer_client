@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 
 	"github.com/chinnaxs/go_beer_client/internal/pkg/api"
@@ -24,17 +23,17 @@ var getCmd = &cobra.Command{
 }
 
 func listBeer(cmd *cobra.Command, args []string) {
-	var client = &http.Client{}
+	a := api.NewDefaultApiClient()
 	if len(args) > 0 {
 		beerName := args[0]
-		getOneBeer(client, beerName)
+		getOneBeer(a, beerName)
 		return
 	}
-	getAllBeers(client)
+	getAllBeers(a)
 }
 
-func getOneBeer(client *http.Client, beerName string) {
-	beer, err := api.GetBeer(client, beerName)
+func getOneBeer(a *api.ApiClient, beerName string) {
+	beer, err := a.GetBeer(beerName)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -43,8 +42,8 @@ func getOneBeer(client *http.Client, beerName string) {
 	fmt.Println(beer)
 }
 
-func getAllBeers(client *http.Client) {
-	beers, err := api.ListBeers(client)
+func getAllBeers(a *api.ApiClient) {
+	beers, err := a.ListBeers()
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
