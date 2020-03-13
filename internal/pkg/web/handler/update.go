@@ -17,10 +17,10 @@ var updateHandler *Handler
 
 func MakeUpdateHandler(templatePath string, apiClient *api.ApiClient) http.HandlerFunc {
 
-	beersTemplatePath := filepath.Join(templatePath, beersTemplateFileName)
+	updateTemplatePath := filepath.Join(templatePath, updateTemplateFileName)
 	updateHandler = &Handler{
 		Templates: template.Must(template.ParseFiles(
-			beersTemplatePath,
+			updateTemplatePath,
 		)),
 		ApiClient: apiClient,
 	}
@@ -28,6 +28,7 @@ func MakeUpdateHandler(templatePath string, apiClient *api.ApiClient) http.Handl
 }
 
 func (h *Handler) updateBeerHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("%s: %s", r.Method, r.URL.Path)
 	switch r.Method {
 	case http.MethodGet:
 		h.getUpdateBeerHandler(w, r)
@@ -41,7 +42,6 @@ func (h *Handler) updateBeerHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) getUpdateBeerHandler(w http.ResponseWriter, r *http.Request) {
-	log.Printf("%s: %s", r.Method, r.URL.Path)
 	beerName := parseUrl(r)
 	if beerName == "" {
 		h.newBeerHandler(w, r)
@@ -81,7 +81,7 @@ func (h *Handler) newBeerHandler(w http.ResponseWriter, r *http.Request) {
 	beer := &beverage.Beer{
 		Name:        "",
 		Description: "",
-		Price:       5,
+		Price:       0,
 	}
 	h.renderUpdateTemplate(w, beer)
 }
@@ -96,7 +96,7 @@ func (h *Handler) existingBeerHandler(w http.ResponseWriter, r *http.Request, be
 }
 
 func (h *Handler) renderUpdateTemplate(w http.ResponseWriter, beer *beverage.Beer) {
-	err := h.Templates.ExecuteTemplate(w, beersTemplateFileName, beer)
+	err := h.Templates.ExecuteTemplate(w, updateTemplateFileName, beer)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
