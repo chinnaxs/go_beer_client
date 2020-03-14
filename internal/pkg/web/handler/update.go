@@ -34,8 +34,6 @@ func (h *Handler) updateBeerHandler(w http.ResponseWriter, r *http.Request) {
 		h.getUpdateBeerHandler(w, r)
 	case http.MethodPost:
 		h.postUpdateBeerHandler(w, r)
-	case http.MethodDelete:
-		h.deleteUpdateBeerHandler(w, r)
 	default:
 		w.WriteHeader(http.StatusNotFound)
 	}
@@ -71,10 +69,6 @@ func (h *Handler) postUpdateBeerHandler(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	http.Redirect(w, r, "/beer/"+name, http.StatusFound)
-}
-
-func (h *Handler) deleteUpdateBeerHandler(w http.ResponseWriter, r *http.Request) {
-
 }
 
 func (h *Handler) newBeerHandler(w http.ResponseWriter, r *http.Request) {

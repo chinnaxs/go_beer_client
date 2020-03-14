@@ -2,3 +2,6 @@
 <p>{{.Description}}</p>
 <p>{{printf "Price: %f" .Price}}</p>
 <p>[<a href="/update/{{.Name}}">Edit</a>]</p>
+<form action="/delete/{{.Name}}" method="post">
+    <input type="submit" value="Delete" />
+</form>
