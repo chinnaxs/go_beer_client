@@ -7,7 +7,6 @@ import (
 )
 
 type Handler struct {
-	TemplatePath string
 	Templates    *template.Template
 	ApiClient    *api.ApiClient
 }

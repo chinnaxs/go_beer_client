@@ -2,6 +2,7 @@ package handler
 
 import (
 	"html/template"
+	"log"
 	"net/http"
 	"path/filepath"
 
@@ -10,17 +11,26 @@ import (
 )
 
 var beerTemplateFileName = "beer.html"
-var BeerHandler *Handler
+var beerHandler *Handler
 
-func MakeBeerHandler(templatePath string, apiClient *api.ApiClient) http.HandlerFunc {
+func BeerHandler(templatePath string, apiClient *api.ApiClient) http.HandlerFunc {
 	beersTemplatePath := filepath.Join(templatePath, beerTemplateFileName)
-	BeerHandler := Handler{
+	beerHandler := Handler{
 		Templates: template.Must(template.ParseFiles(
 			beersTemplatePath,
 		)),
 		ApiClient: apiClient,
 	}
-	return BeerHandler.getBeerHandler
+	return beerHandler.singleBeerHandler
+}
+
+func (h *Handler) singleBeerHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("%s: %s", r.Method, r.URL.Path)
+	if r.Method == http.MethodGet {
+		beerHandler.getBeerHandler(w, r)
+		return
+	}
+	w.WriteHeader(http.StatusNotFound)
 }
 
 func (h *Handler) getBeerHandler(w http.ResponseWriter, r *http.Request) {
