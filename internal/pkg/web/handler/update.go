@@ -15,7 +15,7 @@ var updateTemplateFileName = "update.html"
 
 var updateHandler *Handler
 
-func MakeUpdateHandler(templatePath string, apiClient *api.ApiClient) http.HandlerFunc {
+func UpdateHandler(templatePath string, apiClient *api.ApiClient) http.HandlerFunc {
 
 	updateTemplatePath := filepath.Join(templatePath, updateTemplateFileName)
 	updateHandler = &Handler{

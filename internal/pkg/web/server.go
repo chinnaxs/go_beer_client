@@ -29,10 +29,10 @@ func NewServer(Addr *net.TCPAddr) *Server {
 func (s *Server) Start() {
 	log.Printf("Loaded templates from: %s\n", templatePath)
 
-	var beersHandler = handler.MakeBeersHandler(templatePath, s.ApiClient)
-	var beerHandler = handler.MakeBeerHandler(templatePath, s.ApiClient)
-	var updateHandler = handler.MakeUpdateHandler(templatePath, s.ApiClient)
-	var deleteHandler = handler.MakeDeleteBeerHandler(templatePath, s.ApiClient)
+	var beersHandler = handler.BeersHandler(templatePath, s.ApiClient)
+	var beerHandler = handler.BeerHandler(templatePath, s.ApiClient)
+	var updateHandler = handler.UpdateBeerHandler(templatePath, s.ApiClient)
+	var deleteHandler = handler.DeleteBeerHandler(templatePath, s.ApiClient)
 	http.HandleFunc("/", beersHandler)
 	http.HandleFunc("/beer/", beerHandler)
 	http.HandleFunc("/update/", updateHandler)

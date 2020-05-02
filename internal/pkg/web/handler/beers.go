@@ -14,7 +14,7 @@ var beersTemplateFileName = "beers.html"
 
 var beersHandler *Handler
 
-func MakeBeersHandler(templatePath string, apiClient *api.ApiClient) http.HandlerFunc {
+func BeersHandler(templatePath string, apiClient *api.ApiClient) http.HandlerFunc {
 
 	beersTemplatePath := filepath.Join(templatePath, beersTemplateFileName)
 	beersHandler = &Handler{
@@ -23,26 +23,25 @@ func MakeBeersHandler(templatePath string, apiClient *api.ApiClient) http.Handle
 		)),
 		ApiClient: apiClient,
 	}
-	return beersHandler.listBeerHandler
+	return beersHandler.listBeersHandler
 }
 
-func (h *Handler) listBeerHandler(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) listBeersHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%s: %s", r.Method, r.URL.Path)
-	switch r.Method {
-	case http.MethodGet:
-		beersHandler.handleGetAllBeers(w, r)
-	default:
-		w.WriteHeader(http.StatusNotFound)
+	if r.Method == http.MethodGet {
+		beersHandler.getBeersHandler(w, r)
+		return
 	}
+	w.WriteHeader(http.StatusNotFound)
 }
 
-func (h *Handler) handleGetAllBeers(w http.ResponseWriter, r *http.Request) error {
+func (h *Handler) getBeersHandler(w http.ResponseWriter, r *http.Request) {
 	beers, err := h.ApiClient.ListBeers()
 	if err != nil {
-		return err
+		w.WriteHeader(http.StatusNotFound)
+		return
 	}
 	h.renderBeersTemplate(w, beers)
-	return nil
 }
 
 func (h *Handler) renderBeersTemplate(w http.ResponseWriter, beers []beverage.Beer) {

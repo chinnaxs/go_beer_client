@@ -9,9 +9,8 @@ import (
 
 var deleteHandler *Handler
 
-func MakeDeleteBeerHandler(templatePath string, apiClient *api.ApiClient) http.HandlerFunc {
+func DeleteBeerHandler(templatePath string, apiClient *api.ApiClient) http.HandlerFunc {
 	deleteHandler := Handler{
-		Templates: nil,
 		ApiClient: apiClient,
 	}
 	return deleteHandler.deleteBeerHandler
@@ -19,12 +18,11 @@ func MakeDeleteBeerHandler(templatePath string, apiClient *api.ApiClient) http.H
 
 func (h *Handler) deleteBeerHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("%s: %s", r.Method, r.URL.Path)
-	switch r.Method {
-	case http.MethodPost:
+	if r.Method == http.MethodPost {
 		h.postDeleteBeerHandler(w, r)
-	default:
-		w.WriteHeader(http.StatusNotFound)
+		return
 	}
+	w.WriteHeader(http.StatusNotFound)
 }
 
 func (h *Handler) postDeleteBeerHandler(w http.ResponseWriter, r *http.Request) {
